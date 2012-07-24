@@ -100,9 +100,9 @@ def create_archives(projects, include_ignored=False, output_dir="./"):
             git_filename_info))
         
         # generate the archive
-        subprocess.Popen(["/usr/bin/7z", "a", "-t7z", "-m0=lzma", "-mx=9", 
-            project['archive'], project['tmpdir']], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE, close_fds=True).wait()
+        subprocess.Popen(["/usr/bin/7z", "a", "-t7z", "-m0=lzma", "-mx=9", "-y", 
+            "-bd", project['archive'], project['tmpdir']], stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, close_fds=True).communicate()
 
         # remove the project tmp dir
         shutil.rmtree(project['tmpdir'])
@@ -129,7 +129,7 @@ def encrypt_archives(projects, keep_archives=False, recipients=None):
     gpg_args.extend(archives)
 
     subprocess.Popen(gpg_args, stdout=subprocess.PIPE, stderr=sys.stderr,
-            close_fds=True).wait()
+            close_fds=True).communicate()
     
     # remove the archives 
     if not keep_archives:
